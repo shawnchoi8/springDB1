@@ -50,15 +50,4 @@ public class MemberServiceV3_1 {
             throw new IllegalStateException("exception during transfer");
         }
     }
-
-    private static void release(Connection con) {
-        if (con != null) {
-            try {
-                con.setAutoCommit(true); //Connection Pool 고려
-                con.close();
-            } catch (Exception e) {
-                log.info("error", e);
-            }
-        }
-    }
 }
