@@ -1,10 +1,12 @@
 package hello.jdbc.exception.basic;
 
+import lombok.extern.slf4j.Slf4j;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.sql.SQLException;
 
+@Slf4j
 public class UnCheckedAppTest {
 
     @Test
@@ -12,6 +14,17 @@ public class UnCheckedAppTest {
         Controller controller = new Controller();
         Assertions.assertThatThrownBy(() -> controller.request())
                 .isInstanceOf(Exception.class);
+    }
+
+    @Test
+    void printEx() {
+        Controller controller = new Controller();
+        try {
+            controller.request();
+        } catch (Exception e) {
+//            e.printStackTrace();
+            log.info("ex", e);
+        }
     }
 
     static class Controller {
@@ -43,7 +56,7 @@ public class UnCheckedAppTest {
             try {
                 runSQL();
             } catch (SQLException e) {
-                throw new RuntimeSQLException(e);
+                throw new RuntimeSQLException(e); //if you don't include e, you can't check stack trace
             }
         }
 
@@ -59,6 +72,9 @@ public class UnCheckedAppTest {
     }
 
     static class RuntimeSQLException extends RuntimeException {
+        public RuntimeSQLException() {
+        }
+
         public RuntimeSQLException(Throwable cause) {
             super(cause);
         }
